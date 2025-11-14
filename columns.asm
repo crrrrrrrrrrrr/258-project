@@ -35,7 +35,7 @@ colors: .word 0xff0000, 0x00ff00, 0x0000ff, 0xffff00, 0xffaa00, 0xaa00ff
 # Mutable Data
 ##############################################################################
 columnColor: .space 12
-columnArray: .word 0:312
+columnArray: .word 0:312 # 312 = 6 * 13
 ##############################################################################
 # Code
 ##############################################################################
@@ -132,7 +132,6 @@ moveColumn:
     add $t0, $t0, $t4 #Add these offset to initial position
     add $t0, $t0, $t5
 moveColumnLoop:
-	add $t7, $s1, $t3 
 	lw $t6, 0($s1)
 	sw $t6, 0($t0) #Draw the color
     addi $t1, $t1, -1
@@ -156,10 +155,37 @@ keyboard_input:                     # A key is pressed
 
     li $v0, 1                       # ask system to print $a0
     syscall
-    b main
+    j game_loop
     
 w_shuffle:
-
+    jal CheckBelow
+    lw $t0, ADDR_DSPL
+    la $s1, columnColor
+    
+    #load the current 3 colors from columnColor
+    lw $t2, 0($s1) #load first color
+    lw $t3, 4($s1) #load second color
+    lw $t4, 8($s1) #load third color
+    
+    #Update the shuffled columnColor
+    sw $t4, 0($s1) #New first color
+    sw $t2, 4($s1) #New second color
+    sw $t3, 8($s1) #New third color
+    
+    #Draw the new colors on the board
+    mul $t5, $s2, 4 #x position
+    mul $t6, $s3, 128 #y posiiton
+    add $t0, $t0, $t5 #Add these offset to initial position
+    add $t0, $t0, $t6 #Add these offset to initial position
+    
+    la $s1, columnColor
+    sw $t4, 0($t0)
+    addi $t0, $t0, 128
+    sw $t2, 0($t0)
+    addi $t0, $t0, 128
+    sw $t3, 0($t0)
+    j game_loop
+    
 a_moveLeft:
     jal CheckBelow
     jal checkLeftBorder
