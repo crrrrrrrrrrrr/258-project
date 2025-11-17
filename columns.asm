@@ -25,126 +25,208 @@ ADDR_DSPL:
 # The address of the keyboard. Don't forget to connect it!
 ADDR_KBRD:
     .word 0xffff0000
+columnArray: .word 0:78
 colors: .word 0xff0000, 0x00ff00, 0x0000ff, 0xffff00, 0xffaa00, 0xaa00ff
-
-
-
-
+removeArray: .word 0:78
 
 ##############################################################################
 # Mutable Data
 ##############################################################################
-columnColor: .space 12
-columnArray: .word 0:312 # 312 = 6 * 13
+currentColumn: .space 12
+
 ##############################################################################
 # Code
 ##############################################################################
-	.text
-	.globl main
-    # Run the game.
+.text
+.globl main
 main:
-la $s1, columnColor #$ s1 - Array hold the colors of current column
-add $s2, $zero, 6 #$s2 - Initial X offset
-add $s3, $zero, 4 #$s3 - Initial Y offset
-la $s4, columnArray
+    #Initialization
+    jal reset
+    jal drawBorderTop
+    jal drawBorderBottom
+    jal drawBorderLeft
+    jal drawBorderRight
+    jal createColumn
+    jal drawColumn
+    j game_loop
+    
+game_loop:
+# 1a. Check if key has been pressed
+# 1b. Check which key has been pressed
+    jal checkKeyBoard
+    jal CheckBelow
+    jal repaint
+    # 2a. Check for collisions
+    # 2b. Update locations (capsules)
+	# 3. Draw the screen
+	# 4. Sleep
+    jal sleep
+    # 5. Go back to Step 1
+    j game_loop
 
+##############################################################################
+#Draw
+##############################################################################
+#reset: Reset the arrays and offsets
+reset:
+    la $s1, currentColumn #$ s1 - Array hold the colors of current column
+    add $s2, $zero, 6 #$s2 - Initial X offset
+    add $s3, $zero, 4 #$s3 - Initial Y offset
+    la $s4, columnArray
+    jr $ra
+
+#Clear the entire screen to blank
+clearScreen:
+    lw $t0, ADDR_DSPL
+    li $t1, 1024
+clearScreen_loop:
+    sw $zero, 0($t0)
+    addi $t1, $t1, -1
+    addi $t0, $t0, 4
+    bgez $t1, clearScreen_loop
+    jr $ra
+    
+    
 #Draw top border
+drawBorderTop:
     lw $t0 ADDR_DSPL
     addi $t0, $t0, 392
     addi $t1, $zero, 7 #length of the row
     li $t2 0x808080 #color for the border
-drawBorderTop:
+drawBorderTop_loop:
     sw $t2, 0($t0)
     addi $t0, $t0, 4
     addi $t1, $t1, -1
-    bgez $t1, drawBorderTop
+    bgez $t1, drawBorderTop_loop
+    jr $ra
     
 #Draw bottom border
+drawBorderBottom:
     lw $t0 ADDR_DSPL
     addi $t0, $t0, 2184
     addi $t1, $zero, 7 #length of the row
     li $t2 0x808080 #color for the border
-drawBorderBottom:
+drawBorderBottom_loop:
     sw $t2, 0($t0)
     addi $t0, $t0, 4
     addi $t1, $t1, -1
-    bgez $t1, drawBorderBottom
+    bgez $t1, drawBorderBottom_loop
+    jr $ra
     
 #Draw left border
+drawBorderLeft:
     lw $t0 ADDR_DSPL
     addi $t0, $t0, 392
     addi $t1, $zero, 14 #length of the column
     li $t2 0x808080 #color for the border
-drawBorderLeft:
+drawBorderLeft_loop:
     sw $t2, 0($t0)
     addi $t0, $t0, 128
     addi $t1, $t1, -1
-    bgez $t1, drawBorderLeft
+    bgez $t1, drawBorderLeft_loop
+    jr $ra
     
 #Draw right border
+drawBorderRight:
     lw $t0 ADDR_DSPL
     addi $t0, $t0, 420
     addi $t1, $zero, 14 #length of the column
     li $t2 0x808080 #color for the border
-drawBorderRight:
+drawBorderRight_loop:
     sw $t2, 0($t0)
     addi $t0, $t0, 128
     addi $t1, $t1, -1
-    bgez $t1, drawBorderRight
+    bgez $t1, drawBorderRight_loop
+    jr $ra
+ 
+drawColumnArray:
+    addi $sp, $sp, -4
+    sw   $ra, 0($sp)
+    li $s0, 0
+drawColumnArray_loop:
+    jal drawOneRow
+    addi $s0, $s0, 1
+    blt $s0, 13, drawColumnArray_loop
+    lw $ra, 0($sp)
+    addi $sp, $sp, 4
+    jr $ra
+    
+drawOneRow:
+    lw $t0, ADDR_DSPL
+    #Add Y offset to t0
+    li  $t1, 4                 # initial Y-offset
+    add $t1, $t1, $s0          
+    mul $t1, $t1, 128         
+    add $t0, $t0, $t1
+    
+    #Add X offset to t0
+    li  $t2, 3              
+    mul $t2, $t2, 4            
+    add $t0, $t0, $t2          
+    
+    li $t3, 0
+    la $t4, columnArray
+drawOneRow_loop:
+    #Compute color location in column array
+    mul $t5, $s0, 6 #t5 = y*6
+    add $t5, $t5, $t3 #t5 = y*6+x
+    mul $t5, $t5, 4 #calculate byte
+    add $t7, $t4, $t5 #Move to this location in columnArray
+    
+    lw $t6, 0($t7) #load the color from columnArray
+    beq $t6, $zero, next # skip if there is no color
+    sw $t6, 0($t0) # draw the color on board
+next:
+    addi $t0, $t0, 4
+    addi $t3, $t3, 1
+    blt $t3, 6, drawOneRow_loop
+    jr $ra
+    
+repaint:
+    addi $sp, $sp, -4
+    sw   $ra, 0($sp)
 
-	
-#Draw initial column
-resetDrawColumn:
-    li $s2 6
-    li $s3 4
-    lw $t0, ADDR_DSPL
-    mul $t4, $s2, 4 #x position
-    mul $t5, $s3, 128 #y posiiton
-    add $t0, $t0, $t4 #Add these offset to initial position
-    add $t0, $t0, $t5
-    addi $t1, $zero, 2 # 3 cells
-    la $t2 colors
-    la $s1, columnColor
-drawColumn: 
-    #Generate a random number
-    li $v0, 42		# choose a random number
-    li $a0, 0
-	li $a1, 6
-	syscall
-	mul $t3, $a0, 4 #Get the address offset
-	add $t7, $t2, $t3 #Move the pointer to the color we want
-	lw $t6, 0($t7) # $t6 - the random color we got
-	sw $t6, 0($t0) #Draw the color at current position $t0 points to
-	sw $t6, 0($s1) #Save the color in a column array $s1
-	addi $t1, $t1, -1
-	addi $t0, $t0, 128
-	addi $s1, $s1, 4
-	bgez $t1 drawColumn
-j game_loop
-	
+    jal clearScreen
+    jal drawBorderTop
+    jal drawBorderBottom
+    jal drawBorderLeft
+    jal drawBorderRight
+    jal drawColumnArray
+    jal drawColumn
+    
+    lw $ra, 0($sp)
+    addi $sp, $sp, 4
+    jr $ra
+    
 #Draw the column in new position
-moveColumn:
-    la $s1, columnColor 
+drawColumn:
+    la $s1, currentColumn 
     addi $t1, $zero, 2 # 3 cells
     lw $t0, ADDR_DSPL
     mul $t4, $s2, 4 #x position
     mul $t5, $s3, 128 #y posiiton
     add $t0, $t0, $t4 #Add these offset to initial position
     add $t0, $t0, $t5
-moveColumnLoop:
+drawColumn_Loop:
 	lw $t6, 0($s1)
 	sw $t6, 0($t0) #Draw the color
     addi $t1, $t1, -1
     addi $t0, $t0, 128
     addi $s1, $s1, 4
-    bgez $t1 moveColumnLoop
-	
-game_loop:
-    # 1a. Check if key has been pressed
+    bgez $t1 drawColumn_Loop
+    
+    
+
+##############################################################################
+#Check keyboard inputs
+##############################################################################
+checkKeyBoard:
+    addi $sp, $sp, -4
+    sw   $ra, 0($sp)
     lw $t1, ADDR_KBRD               # $t0 = base address for keyboard
     lw $t8, 0($t1)                  # Load first word from keyboard
     beq $t8, 1, keyboard_input      # If first word 1, key is pressed
-    bne  $t8, 1, game_loop
+    jr $ra
 keyboard_input:                     # A key is pressed
     lw $a0, 4($t1)                  # Load second word from keyboard
     beq $a0, 0x77, w_shuffle     # Check if the key w was pressed
@@ -152,140 +234,429 @@ keyboard_input:                     # A key is pressed
     beq $a0, 0x73, s_moveDown     # Check if the key s was pressed
     beq $a0, 0x64, d_moveRight     # Check if the key d was pressed
     beq $a0, 0x71, respond_to_Q     # Check if the key q was pressed
-
-    li $v0, 1                       # ask system to print $a0
-    syscall
-    j game_loop
+    lw $ra, 0($sp)
+    addi $sp, $sp, 4
+    jr $ra
     
 w_shuffle:
+    addi $sp, $sp, -4
+    sw   $ra, 0($sp)
     jal CheckBelow
-    lw $t0, ADDR_DSPL
-    la $s1, columnColor
+    bnez $v0, noShuffle #0 is returned, reach the end, no shuffle will be made
+
+    la $s1, currentColumn
     
-    #load the current 3 colors from columnColor
+    #load the current 3 colors from currentColumn
     lw $t2, 0($s1) #load first color
     lw $t3, 4($s1) #load second color
     lw $t4, 8($s1) #load third color
     
-    #Update the shuffled columnColor
+    #Update the shuffled currentColumn
     sw $t4, 0($s1) #New first color
     sw $t2, 4($s1) #New second color
     sw $t3, 8($s1) #New third color
-    
-    #Draw the new colors on the board
-    mul $t5, $s2, 4 #x position
-    mul $t6, $s3, 128 #y posiiton
-    add $t0, $t0, $t5 #Add these offset to initial position
-    add $t0, $t0, $t6 #Add these offset to initial position
-    
-    la $s1, columnColor
-    sw $t4, 0($t0)
-    addi $t0, $t0, 128
-    sw $t2, 0($t0)
-    addi $t0, $t0, 128
-    sw $t3, 0($t0)
-    j game_loop
-    
-a_moveLeft:
-    jal CheckBelow
-    jal checkLeftBorder
-    jal eraseColumn
-    addi $s2, $s2, -1
-    j moveColumn
-    
-s_moveDown:
-    jal CheckBelow
-    jal eraseColumn
-    addi $s3, $s3, 1
-    j moveColumn
-    
-d_moveRight:
-    jal CheckBelow
-    jal checkRightBorder
-    jal eraseColumn
-    addi $s2, $s2, 1
-    j moveColumn
+    lw $ra, 0($sp)
+    addi $sp, $sp, 4
+    jr $ra
+noShuffle:
+    jr $ra
+
     
 respond_to_Q:
-	li $v0, 10                      # Quit gracefully
+	li $v0, 10      # Quit gracefully
 	syscall
 	
+a_moveLeft:
+    addi $sp, $sp, -4
+    sw   $ra, 0($sp)
+    jal CheckBelow
+    jal checkLeftBorder
+    bnez $v0, dontMove  # if hit the border, don't move
+    addi $s2, $s2, -1
+    lw $ra, 0($sp)
+    addi $sp, $sp, 4
+    jr $ra
+    
+s_moveDown:
+    addi $sp, $sp, -4
+    sw   $ra, 0($sp)
+    jal CheckBelow
+    bnez $v0, reachBottom  # if hit the border, don't move
+    addi $s3, $s3, 1
+    lw $ra, 0($sp)
+    addi $sp, $sp, 4
+    jr $ra
+    
+d_moveRight:
+    addi $sp, $sp, -4
+    sw   $ra, 0($sp)
+    jal CheckBelow
+    bnez $v0, dontMove
+    jal checkRightBorder
+    bnez $v0, dontMove  # if hit the border, don't move
+    addi $s2, $s2, 1
+    lw $ra, 0($sp)
+    addi $sp, $sp, 4
+    jr $ra
+    
+dontMove:
+    lw $ra, 0($sp)
+    addi $sp, $sp, 4
+    jr $ra
 
-    # 1b. Check which key has been pressed
-    # 2a. Check for collisions
-	# 2b. Update locations (capsules)
-	# 3. Draw the screen
-	# 4. Sleep
+##############################################################################
+#Check Helpers
+##############################################################################
+#Check if there is something below
+CheckBelow:
+    move $t0, $s3
+    la $t3, columnArray
+    
+    addi $t4, $s2, -3 # x
+    addi $t5, $s3, -4 # y
+    bgt $t0, 13, hasCollision
 
-    # 5. Go back to Step 1
-    j game_loop
-  
-#Check borders
+    # check below bottom gem:
+    addi $t5, $t5, 3 # y+3
+
+    mul $t1, $t5, 6 #t1 = y*6
+    add $t1, $t1, $t4 #t1 = y*6+x
+    mul $t1, $t1, 4 # multiply by 4 bytes
+    add $t3, $t3, $t1 #Move the pointer t3 to the current block
+    lw $t2, 0($t3) #load the color at the index in columnArray
+    bne $t2, 0, hasCollision
+    # otherwise no collision
+    li $v0, 0 #return 0
+    jr $ra
+hasCollision: 
+    li $v0, 1 #return 1
+    jr $ra
+    
+#Check if the move hit borders
 checkLeftBorder:
-    beq $s2, 3, game_loop
+    beq $s2, 3, hitBorder
+    li $v0, 0 #otherwise return 0
     jr $ra
     
 checkBottomBorder:
-    beq $s3, 14, game_loop
+    beq $s3, 14, hitBorder
+    li $v0, 0 #otherwise return 0
     jr $ra
     
 checkRightBorder: 
-    beq $s2, 8, game_loop
+    beq $s2, 8, hitBorder
+    li $v0, 0 #otherwise return 0
     jr $ra
     
-#Erase the old column
-eraseColumn:
-    lw $t0, ADDR_DSPL
-    mul $t4, $s2, 4 #x position
-    mul $t5, $s3, 128 #y posiiton
-    add $t0, $t0, $t4 #Add these offset to initial position
-    add $t0, $t0, $t5
-    addi $t1, $zero, 2 # 3 cells
-eraseLoop:
-    sw $zero, 0($t0) #Draw the color
-    addi $t1, $t1, -1
-	addi $t0, $t0, 128
-	bgez $t1 eraseLoop
+hitBorder:
+    li $v0, 1 #return 1
+    jr $ra
+    
+##############################################################################
+#Game logic
+##############################################################################
+createColumn:
+    la $t0, currentColumn
+    li $t1, 2 #3 cells
+    la $t2, colors
+createColumn_loop:
+    #Generate a random number
+    li $v0, 42	# choose a random number
+    li $a0, 0
+	li $a1, 6
+	syscall
+	
+	mul $t3, $a0, 4 #Get the address offset
+	add $t4, $t2, $t3 #Move the pointer to the color we want
+	lw $t6, 0($t4) # $t6 - load the random color we got from colors
+	sw $t6, 0($t0) #Save the color in a column array $s1
+	
+	addi $t1, $t1, -1
+	addi $t0, $t0, 4
+	bgez $t1 createColumn_loop
 	jr $ra
 
-#Check if there is something below
-CheckBelow:
-    la $t3, columnArray
-    addi $t0, $s3, -1 #Check for the cell below bottom cell #t0 = $s3 - 4 + 3
-    mul $t1, $t0, 6 # y * width
-    add $t1, $t1, $s2 # y * width + x
-    add $t1, $t1, -6 # y * width + x
-    mul $t1, $t1, 4 # multiply by 4 bytes
-    bge $t1, 300, recordColumn #Reach the bottom
-    add $t3, $t3, $t1
-    lw $t2, 0($t3) #load the color at the index in columnArray
-    bne $t2, 0,recordColumn
+    
+recordColumn:
+    la $t0, columnArray
+    addi $t1, $s2, -3
+    addi $t2, $s3, -4
+    li $t3, 0
+    la $t4, currentColumn
+recordColumn_loop:
+    add $t5, $t2, $t3
+    mul $t5, $t5, 6
+    add $t5, $t5, $t1
+    mul $t5, $t5, 4
+    
+    add $t6, $t0, $t5
+    lw $t7, 0($t4)
+    sw $t7, 0($t6)
+    
+    addi $t4, $t4, 4
+    addi $t3, $t3, 1
+    blt $t3, 3, recordColumn_loop
+    
+    jr $ra
+    
+reachBottom:
+    jal recordColumn
+    jal checkCollision
+    jal createColumn
+    li $s2, 3
+    li $s3, 4
+    j game_loop
+
+checkCollision:
+    addi $sp,$sp,-4
+    sw $ra,0($sp)
+
+checkCollision_loop:
+    jal checkThree
+    beq $v0,$zero, end_checkCollision   # no matches, exit loop
+
+    jal removeMatches
+    jal dropping
+
+    j checkCollision_loop
+
+end_checkCollision:
+    lw $ra,0($sp)
+    addi $sp,$sp,4
     jr $ra
 
-#Fix the column when it reach the bottom and record it
-recordColumn:
-    la $t1, columnColor
-    li $t2, 2 #3 cells
-    la $s4, columnArray
-    add $t6, $s3, -4 #Deduct the initial offeset
-recordColumnLoop: #$S2 x-offset   $s3 y-offset
-    #Compute the index to store in columnArray
-    mul $t3, $t6, 6 # y * width
-    add $t3, $t3, $s2 # y * width + x
-    add $t3, $t3, -6 #Deduct the initial x offeset
-    mul $t3, $t3, 4 # multiply by 4 bytes
-    # add $t4, $s4, $t3 #Move the pointer to the index
-    #Write the color to columnArray
-    add $t7, $s4, $t3
-    lw $t5, 0($t1) #load color of this cell from colorArray to $t4
-    sw $t5, 0($t7) #Record the color to columnArray
-    #Increment for next cell
-    addi $t6, $t6, 1
-    addi $t2, $t2, -1
+checkThree:
+    addi $sp, $sp, -4
+    sw $ra, 0($sp)
+    
+    la $t0, removeArray
+    li $t9, 78 #Count
+clearRemove:
+    sw $zero, 0($t0)
+    addi $t0, $t0, 4
+    addi $t9, $t9, -1
+    bgez $t9, clearRemove
+la $s4, columnArray
+la $s5, removeArray
+la $s6, 0 #s6: A boolean 1-Three Found 0-Not Found
+li $t1, 0
+
+ScanEachRow:
+    bge $t1, 13, done #t1 - y
+    li $t2, 0
+ScanOneRow:
+    bge $t2, 6, next_row #t2 - x
+    
+    #Get color from current cell
+    mul $t0, $t1, 6        # t0 = y*6
+    add $t0, $t0, $t2        # t0 = y*6 + x
+    mul $t0, $t0, 4          
+    add $t3, $s4, $t0        # t3 points to color of current cell
+
+    lw  $t4, 0($t3)          # t4 load color
+    
+    ####Horizontal Check###### check the both sides for x = 1, 2, 3, 4
+    blt $t2, 1, vertical # if x = 0 skip
+    bgt $t2, 4, vertical # if x = 4 skip
+    
+    lw $t5, -4($t3) #load color of the left neighbour
+    lw $t6, 4($t3) #load color of the right neighbour
+    
+    beq $t5, $zero, vertical
+    bne $t5, $t4, vertical
+    bne $t6, $t4, vertical
+    
+    #Otherwise there is a match
+    move $a0, $t1 #a0 - y
+    move $a1, $t2 #a1 - x
+    jal markHorizontalMatch
+    li $s6, 1 #A Three Match Found
+    
+    ####Vertical Check######
+    vertical: 
+        bgt $t1, 10, diagonal_down #Last two rows already covered, skip
+        
+        lw $t5, 24($t3) #load color of the neighbour 1 cell under
+        lw $t6, 48($t3) #load color of the neighbour 2 cell under
+        
+        beq $t5, $zero, diagonal_down
+        bne $t5, $t4, diagonal_down
+        bne $t6, $t4, diagonal_down
+        
+        #Otherwise there is a match
+        move $a0, $t1 #a0 - y
+        move $a1, $t2 #a1 - x
+        jal markVerticalMatch
+        li $s6, 1 #A Three Match Found
+        
+    ####Diagonal Check######
+    diagonal_down: #\
+        bgt $t1, 10, diagonal_up #Last two rows already covered, skip
+        bgt $t2, 3, diagonal_up
+        
+        lw $t5, 28($t3) #load color of the bottom-right neighbour  = 24 + 4
+        lw $t6, 56($t3) #load color of the bottom-right neighbour  = 48 + 8
+        
+        beq $t5, $zero, diagonal_up
+        bne $t5, $t4, diagonal_up
+        bne $t6, $t4, diagonal_up
+        
+        #Otherwise there is a match
+        move $a0, $t1 #a0 - y
+        move $a1, $t2 #a1 - x
+        jal markDiagonalDown
+        li $s6, 1 #A Three Match Found
+        
+    diagonal_up: #/
+        blt $t1, 2, skip_diag_up #Last two rows already covered, skip
+        bgt $t2, 3, skip_diag_up
+        
+        lw $t5, -20($t3) #load color of the bottom-right neighbour  = -24 + 4
+        lw $t6, -40($t3) #load color of the bottom-right neighbour  = -48 + 8
+        
+        beq $t5, $zero, skip_diag_up
+        bne $t5, $t4, skip_diag_up
+        bne $t6, $t4, skip_diag_up
+        
+        #Otherwise there is a match
+        move $a0, $t1 #a0 - y
+        move $a1, $t2 #a1 - x
+        jal markDiagonalUp
+        li $s6, 1 #A Three Match Found
+        j skip_diag_up  
+###Helpers for checkThree
+skip_diag_up:
+    addi $t2, $t2, 1 #x + 1
+    j ScanOneRow #next cell
+    
+next_row:
+    addi $t1, $t1, 1 #y + 1
+    j ScanEachRow #next row
+
+done: 
+    lw $ra, 0($sp)
+    addi $sp, $sp, 4
+    
+    move $v0, $s6 #Return if a 3 match is found
+    jr $ra
+    
+markHorizontalMatch: #$s5, removeArray
+    mul $t0, $a0, 6 #t0 = y*6
+    add $t0, $t0, $a1 #t0 = y*6+x
+    mul $t0, $t0, 4 #bytes
+    add $t0, $s5, $t0 #Points to current cell in removeArray
+    li $t9, 1
+    sw $t9, 0($t0)
+    sw $t9, -4($t0)
+    sw $t9, 4($t0)
+    jr $ra
+    
+markVerticalMatch:
+    mul $t0, $a0, 6 #t0 = y*6
+    add $t0, $t0, $a1 #t0 = y*6+x
+    mul $t0, $t0, 4 #bytes
+    add $t0, $s5, $t0 #Points to current cell in removeArray
+    li $t9, 1
+    sw $t9, 0($t0)
+    sw $t9, 24($t0)
+    sw $t9, 48($t0)
+    jr $ra
+    
+markDiagonalDown:
+    mul $t0, $a0, 6 #t0 = y*6
+    add $t0, $t0, $a1 #t0 = y*6+x
+    mul $t0, $t0, 4 #bytes
+    add $t0, $s5, $t0 #Points to current cell in removeArray
+    li $t9, 1
+    sw $t9, 0($t0)
+    sw $t9, 28($t0)
+    sw $t9, 56($t0)
+    jr $ra
+    
+markDiagonalUp: 
+    mul $t0, $a0, 6 #t0 = y*6
+    add $t0, $t0, $a1 #t0 = y*6+x
+    mul $t0, $t0, 4 #bytes
+    add $t0, $s5, $t0 #Points to current cell in removeArray
+    li $t9, 1
+    sw $t9, 0($t0)
+    sw $t9, -20($t0)
+    sw $t9, -40($t0)
+    jr $ra
+
+removeMatches:
+    la $t0, columnArray
+    la $t1, removeArray
+    li $t2, 78 #Count = 13*6
+removeMatches_loop:
+    lw $t3, 0($t1)
+    beq $t3, $zero, skip_remove
+    sw $zero, 0($t0)
+
+skip_remove:
+    addi $t0, $t0, 4
     addi $t1, $t1, 4
-    bgez $t2, recordColumnLoop
-j resetDrawColumn
+    addi $t2, $t2, -1
+    bgtz $t2, removeMatches_loop
+    
+    jr $ra
+ 
+#The dropping mechanism after removal
+dropping:
+    addi $sp, $sp, -4
+    sw $ra, 0($sp)
+    
+    li $t7, 0  # boolean-changed = 0
+    li $t1, 0 # x = 0
+    
+drop_x_loop:
+    bge  $t1, 6, gravity_check_if_done
+    li   $t2, 11 # y = 11 (one row above bottom)
+    
+drop_y_loop:
+    bltz $t2, drop_x_next
+    
+    mul $t3, $t2, 6
+    add $t3, $t3, $t1
+    mul $t3, $t3, 4
 
+    la $t0, columnArray
+    add $t4, $t0, $t3 
 
+    addi $t3, $t3, 24 # next row
+    add $t5, $t0, $t3 
+
+    lw $t6, 0($t4) # cell above
+    lw $t8, 0($t5) # cell below
+    beq $t6, $zero, drop_y_next
+    bne $t8, $zero, drop_y_next
+
+    # SWAP
+    sw $t6, 0($t5)
+    sw $zero, 0($t4)
+    li $t7, 1 # changed = 1
+
+drop_y_next:
+    addi $t2, $t2, -1
+    j drop_y_loop
+
+drop_x_next:
+    addi $t1, $t1, 1
+    j drop_x_loop
+
+gravity_check_if_done:
+    beq $t7, $zero, drop_done
+    j dropping
+
+drop_done:
+    lw $ra, 0($sp)
+    addi $sp, $sp, 4
+    jr $ra
     
     
+sleep:
+    li $t0, 2000000 # Count down to slow down the game_loop
+sleep_loop:
+    addi $t0, $t0, -1
+    bnez $t0, sleep_loop
+    jr $ra
