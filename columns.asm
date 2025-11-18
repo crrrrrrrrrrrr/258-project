@@ -1,7 +1,7 @@
 ################# CSC258 Assembly Final Project ###################
 # This file contains our implementation of Columns.
 #
-# Student 1: Name, Student Number
+# Student 1: Cynthia Rong, 1011129832
 # Student 2: Name, Student Number (if applicable)
 #
 # We assert that the code submitted here is entirely our own 
