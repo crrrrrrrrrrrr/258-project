@@ -16,7 +16,7 @@
 \title{Assembly Project: Columns}
 
 % TODO: Enter your name
-\author{Cynthia Rong 1011129832 and Jasmine Li STUDENTNUMBER}
+\author{Cynthia Rong 1011129832 and Jasmine Li 1008825407}
 
 \begin{document}
 \maketitle
@@ -50,8 +50,22 @@
 
 
     \end{enumerate}
+\item What is stored in memory:
+    \begin{enumerate}
 
-    
+    \item ColumnArray: An array that has 78 (6*13) spaces that stores the color of each pixels in the grid
+\item RemoveArray: An array that map to ColumnArray. It's used for marking collision of columns and stores 1 or 0. 1 indicate this pixel has matches and will be removed.
+\item Colors: An array that stores the 6 colors
+\item CurrentColumns: An array with 3 spaces that stores the colors of current falling column.
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{Memory_In_Game.png}
+    \caption{Memory in the middle of a game}
+    \label{fig:placeholder}
+\end{figure}
+
+    \end{enumerate}
+    \newpage
 
 \begin{figure}[ht!]
     \centering
@@ -62,7 +76,7 @@
 
 \begin{figure}[ht!]
     \centering
-     \includegraphics[width=0.3\textwidth]{static_scene.png}
+     \includegraphics[width=0.3\textwidth]{Milestone1_Static.png}
     \caption{Static Screen}
     \label{Static Screen}
 \end{figure}
@@ -73,6 +87,7 @@
 \begin{itemize}
 \item You can use the A, S, D keys to move the column left, down and right respectively. To shuffle the order of the gems, you can press W. The goal is to eliminate gems by arranging them so that there are 3 in a row of the same colour, either horizontally, vertically or diagonally. 
 \item The features we implemented are: gravity
+
 \end{itemize}
 
     
@@ -87,7 +102,7 @@
 \begin{center}
 \begin{tabular}{|| c | c ||}
 \hline
- Student 1 (Cynthia 1011129832) &  Student 2 (Jasmine and student number) \\ 
+ Student 1 (Cynthia 1011129832) &  Student 2 (Jasmine and 1008825407) \\ 
  \hline
  Milestone 1, 2, 3 & Milestone 1, 2, 3\\
  \hline
