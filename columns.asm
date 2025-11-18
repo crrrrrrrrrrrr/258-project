@@ -25,7 +25,7 @@ ADDR_DSPL:
 # The address of the keyboard. Don't forget to connect it!
 ADDR_KBRD:
     .word 0xffff0000
-columnArray: .word 0:78
+columnArray: .word 0:78 #6*13
 colors: .word 0xff0000, 0x00ff00, 0x0000ff, 0xffff00, 0xffaa00, 0xaa00ff
 removeArray: .word 0:78
 
@@ -214,6 +214,7 @@ drawColumn_Loop:
     addi $t0, $t0, 128
     addi $s1, $s1, 4
     bgez $t1 drawColumn_Loop
+    jr $ra
     
     
 
@@ -335,6 +336,23 @@ hasCollision:
 #Check if the move hit borders
 checkLeftBorder:
     beq $s2, 3, hitBorder
+    
+    la $t0, columnArray
+    addi $t1, $s2, -3 # x
+    addi $t2, $s3, -4 # y
+    
+    mul $t3, $t2, 6 # y*6
+    add $t3, $t3, $t1 #t1 = y*6+x
+    mul $t3, $t3, 4
+    add $t3, $t3, $t0 #Move to current cell
+    
+    lw $t2, -4($t3) #load the color of the cell on the left
+    bne $t2, 0, hitBorder
+    lw $t2,  20($t3) #load the color of the cell on the left bottom
+    bne $t2, 0, hitBorder
+    lw $t2,  44($t3) #load the color of the cell on the left bottom bottom
+    bne $t2, 0, hitBorder
+    
     li $v0, 0 #otherwise return 0
     jr $ra
     
@@ -345,6 +363,23 @@ checkBottomBorder:
     
 checkRightBorder: 
     beq $s2, 8, hitBorder
+    
+    la $t0, columnArray
+    addi $t1, $s2, -3 # x
+    addi $t2, $s3, -4 # y
+    
+    mul $t3, $t2, 6 # y*6
+    add $t3, $t3, $t1 #t1 = y*6+x
+    mul $t3, $t3, 4
+    add $t3, $t3, $t0 #Move to current cell
+    
+    lw $t2, 4($t3) #load the color of the cell on the right
+    bne $t2, 0, hitBorder
+    lw $t2, 28($t3) #load the color of the cell on the right bottom
+    bne $t2, 0, hitBorder
+    lw $t2, 52($t3) #load the color of the cell on the right bottom bottom
+    bne $t2, 0, hitBorder
+    
     li $v0, 0 #otherwise return 0
     jr $ra
     
@@ -403,7 +438,8 @@ reachBottom:
     jal recordColumn
     jal checkCollision
     jal createColumn
-    li $s2, 3
+    jal checkGameOver
+    li $s2, 6
     li $s3, 4
     j game_loop
 
@@ -610,7 +646,7 @@ dropping:
     li $t1, 0 # x = 0
     
 drop_x_loop:
-    bge  $t1, 6, gravity_check_if_done
+    bge  $t1, 6, drop_check_if_done
     li   $t2, 11 # y = 11 (one row above bottom)
     
 drop_y_loop:
@@ -644,7 +680,7 @@ drop_x_next:
     addi $t1, $t1, 1
     j drop_x_loop
 
-gravity_check_if_done:
+drop_check_if_done:
     beq $t7, $zero, drop_done
     j dropping
 
@@ -653,10 +689,16 @@ drop_done:
     addi $sp, $sp, 4
     jr $ra
     
-    
+checkGameOver:
+    la $t0, columnArray
+    add $t1, $t0, 60
+    lw $t2, 0($t1)
+    bne $t2, 0, respond_to_Q
+
 sleep:
     li $t0, 2000000 # Count down to slow down the game_loop
 sleep_loop:
     addi $t0, $t0, -1
     bnez $t0, sleep_loop
     jr $ra
+    
