@@ -1,17 +1,17 @@
 ################# CSC258 Assembly Final Project ###################
 # This file contains our implementation of Columns.
 #
-# Student 1: Name, Student Number
-# Student 2: Name, Student Number (if applicable)
+# Student 1: Cynthia Rong, 1011129832
+# Student 2: Jasmine Li, 1008825407
 #
 # We assert that the code submitted here is entirely our own 
 # creation, and will indicate otherwise when it is not.
 #
 ######################## Bitmap Display Configuration ########################
-# - Unit width in pixels:       TODO
-# - Unit height in pixels:      TODO
-# - Display width in pixels:    TODO
-# - Display height in pixels:   TODO
+# - Unit width in pixels:       8
+# - Unit height in pixels:      8
+# - Display width in pixels:    256
+# - Display height in pixels:   256
 # - Base Address for Display:   0x10008000 ($gp)
 ##############################################################################
 
@@ -25,14 +25,15 @@ ADDR_DSPL:
 # The address of the keyboard. Don't forget to connect it!
 ADDR_KBRD:
     .word 0xffff0000
-columnArray: .word 0:78 #6*13
 colors: .word 0xff0000, 0x00ff00, 0x0000ff, 0xffff00, 0xffaa00, 0xaa00ff
-removeArray: .word 0:78
 
 ##############################################################################
 # Mutable Data
 ##############################################################################
 currentColumn: .space 12
+columnArray: .word 0:78 #6*13
+removeArray: .word 0:78
+score: .word 10:1  # score starts at 0 ################################## somewhere this is getting overwritten**
 
 ##############################################################################
 # Code
@@ -50,17 +51,28 @@ main:
     jal drawColumn
     j game_loop
     
-game_loop:
-# 1a. Check if key has been pressed
-# 1b. Check which key has been pressed
+game_loop: # put the intialisation in a loop
+    jal initialise_sleep_counter
+    check_settings:
+    # 1a. Check if key has been pressed
+    # 1b. Check which key has been pressed
     jal checkKeyBoard
     jal CheckBelow
     jal repaint
+    
     # 2a. Check for collisions
     # 2b. Update locations (capsules)
 	# 3. Draw the screen
+	
 	# 4. Sleep
-    jal sleep
+	jal sleep
+    jal increment_sleep
+    
+    
+    # shift down 1 block to do gravity
+	jal s_moveDown
+	# TODO: ^^how to get gravity to still work while player is moving left/right/shuffling
+    
     # 5. Go back to Step 1
     j game_loop
 
@@ -507,6 +519,11 @@ ScanOneRow:
     move $a1, $t2 #a1 - x
     jal markHorizontalMatch
     li $s6, 1 #A Three Match Found
+    # load score AND increment
+    la $t1, score # load score address
+    lw $s7, 0($t1)
+    addi $s7, $s7, 1
+    sw $s7, 0($t1)
     
     ####Vertical Check######
     vertical: 
@@ -524,6 +541,11 @@ ScanOneRow:
         move $a1, $t2 #a1 - x
         jal markVerticalMatch
         li $s6, 1 #A Three Match Found
+        # load score AND increment
+        la $t1, score # load score address
+        lw $s7, 0($t1)
+        addi $s7, $s7, 1
+        sw $s7, 0($t1)
         
     ####Diagonal Check######
     diagonal_down: #\
@@ -542,6 +564,10 @@ ScanOneRow:
         move $a1, $t2 #a1 - x
         jal markDiagonalDown
         li $s6, 1 #A Three Match Found
+        # load score AND increment
+        lw $s7, score
+        addi $s7, $s7, 1
+        sw $s7, score
         
     diagonal_up: #/
         blt $t1, 2, skip_diag_up #Last two rows already covered, skip
@@ -559,6 +585,10 @@ ScanOneRow:
         move $a1, $t2 #a1 - x
         jal markDiagonalUp
         li $s6, 1 #A Three Match Found
+        # load score AND increment
+        lw $s7, score
+        addi $s7, $s7, 1
+        sw $s7, score
         j skip_diag_up  
 ###Helpers for checkThree
 skip_diag_up:
@@ -696,9 +726,33 @@ checkGameOver:
     bne $t2, 0, respond_to_Q
 
 sleep:
-    li $t0, 2000000 # Count down to slow down the game_loop
+    li $t0, 200000 # Count down to slow down the game_loop
 sleep_loop:
     addi $t0, $t0, -1
     bnez $t0, sleep_loop
+    jr $ra
+    
+initialise_sleep_counter:
+    lw $s7, score   # load score
+    srl $s7, $s7, 1 # divide score by 2
+    mult $s7, $s7, -1
+    # count $a3 is 100-(score//2)
+    addi $a3, $s7, 100     # load $a3, which is the difficulty, where the lower $a3, the harder the game
+    add $s7, $zero, $zero # initialise score counter
+
+    updating_sleep_loop_start:
+    beq $s7, $a3, updating_sleep_loop_end #if counter reaches stopping condition, then exit loop
+    j check_settings
+
+increment_sleep:        # to implement gravity
+    add $t0, $v0, $zero # save value in $v0
+    li $v0, 32          # operation to suspend program
+    li $a0, 1           # number of milliseconds to wait
+    syscall             # sleep
+    addi $s7, $s7, 1    # increment $s7 by 1
+    
+    add $v0, $t0, $zero # reload value in $v0
+    j updating_sleep_loop_start
+    updating_sleep_loop_end:
     jr $ra
     
