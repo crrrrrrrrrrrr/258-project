@@ -45,6 +45,9 @@ score: .word 0  # score starts at 0 ################################## somewhere
 main:
     #Initialization
     jal reset
+    
+    # get input for levels 1,2,3
+    
     jal drawBorderTop
     jal drawBorderBottom
     jal drawBorderLeft
@@ -77,6 +80,21 @@ game_loop: # put the intialisation in a loop
     
     # 5. Go back to Step 1
     j game_loop
+
+##############################################################################
+# select difficulty
+select_difficulty:
+    # print display screen (console? or screen)
+    
+    # handle input from keys 1, 2, 3, which have hex 31, 32, 33 respectively 
+    
+    
+    
+    # set the respective difficulty parameters 
+    
+    
+
+# levels: easy (1, 120), medium (2, 100), hard (3, 90)
 
 ##############################################################################
 #Draw
@@ -249,9 +267,14 @@ keyboard_input:                     # A key is pressed
     beq $a0, 0x73, s_moveDown     # Check if the key s was pressed
     beq $a0, 0x64, d_moveRight     # Check if the key d was pressed
     beq $a0, 0x71, respond_to_Q     # Check if the key q was pressed
+    beq $a0, 0x70, respond_to_P     # check if the key p was pressed
     lw $ra, 0($sp)
     addi $sp, $sp, 4
     jr $ra
+    
+respond_to_P:
+
+
     
 w_shuffle:
     addi $sp, $sp, -4
@@ -272,8 +295,12 @@ w_shuffle:
     sw $t3, 8($s1) #New third color
     lw $ra, 0($sp)
     addi $sp, $sp, 4
+    lw $ra, 0($sp) ##################******************************************
+    addi $sp, $sp, 4
     jr $ra
 noShuffle:
+    lw $ra, 0($sp)#################******************************************
+    addi $sp, $sp, 4
     jr $ra #################****************************************** having issues getting stuck here...
 
     
