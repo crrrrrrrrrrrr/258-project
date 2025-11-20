@@ -29,14 +29,36 @@ colors: .word 0xff0000, 0x00ff00, 0x0000ff, 0xffff00, 0xffaa00, 0xaa00ff
 paused_array:  
 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 
 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 
-0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 
 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 
-0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 
-
+0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+game_array: 
+0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 
+0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+over_array:
+0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+retry_array:
+0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 
  
 
 ##############################################################################
 # Mutable Data
+mutable_data:
 ##############################################################################
 currentColumn: .space 12
 columnArray: .word 0:78 #6*13
@@ -89,25 +111,35 @@ game_loop: # put the intialisation in a loop
     j game_loop
 
 ##############################################################################
-# select difficulty
-select_difficulty:
-    # print display screen (console? or screen)
-    
-    # handle input from keys 1, 2, 3, which have hex 31, 32, 33 respectively 
-    
-    
-    
-    # set the respective difficulty parameters 
-    
-    
-
-# levels: easy (1, 120), medium (2, 100), hard (3, 90)
-
-##############################################################################
 #Draw
 ##############################################################################
 #reset: Reset the arrays and offsets
 reset:
+    
+    # clear current Column (12 bytes)
+    clearCurrentColumn:
+    la $t1, currentColumn
+    lw $zero, 0($t1)
+    lw $zero, 4($t1)
+    lw $zero, 8($t1)
+    
+    # clear column array (78 words)
+    clearColumnArray: 
+    la $t4, columnArray
+    addi $t7, $t4, 312  # intiailise stopping condition
+    clearPixel_start:
+        beq $t4, $t7, clearPixel_end    # end if done  clearing all array elements
+        sw $zero, 0($t4)    # store 0 (to clear)
+        add $t4, $t4, 4     # increment column array address
+        j clearPixel_start
+    clearPixel_end:
+    
+    # reset score, gravity count
+    la $t0, score
+    sw $zero, 0($t0)
+    la $t0, gravity_count
+    sw $zero, 0($t0)
+    
     la $s1, currentColumn #$ s1 - Array hold the colors of current column
     add $s2, $zero, 6 #$s2 - Initial X offset
     add $s3, $zero, 4 #$s3 - Initial Y offset
@@ -286,7 +318,9 @@ respond_to_P:   # pause the game
     # clear screen
     jal clearScreen
     # display the word paused on the screen
-    jal display_paused 
+    addi $a0, $zero, 2688       # load starting offset
+    la $a1, paused_array    # load array address
+    jal display_array 
     
     # enter loop
     pause_start:
@@ -312,27 +346,27 @@ respond_to_P:   # pause the game
     addi $sp, $sp, 4
     jr $ra
     
-display_paused:         # display the word paused on the screen
+display_array:         # display the word FROM THE ARRAY on the screen (paused, game over retry)
     lw $t0, ADDR_DSPL
     la $t5, 0xffffff # load colour
-    addi $t0, $t0, 2688     # add 128*21=2688 to address, so that it prints in the bottom 
-    la $t1, paused_array    # load address of the array
+    add $t0, $t0, $a0     # add offset to address, so that it prints in the bottom plus whatever
+    add $t1, $zero, $a1    # load address of the array
     
     
-    # stopping condition, once done 5 rows, 128*5 = 640
-    addi $t7, $t0, 640
-    draw_paused_start:
-    beq $t7, $t0, draw_paused_end # end if done
+    # stopping condition, once done 6 rows, 128*5 = 640
+    addi $t7, $t0, 768
+    draw_array_start:
+    beq $t7, $t0, draw_array_end # end if done
     lw $t2, 0($t1)                              # load value from paused array
-    bne $t2, 1, increment_paused_address        # skip if value is 0
+    bne $t2, 1, increment_array_address        # skip if value is 0
     # else, draw white pixel
     sw $t5, 0($t0)
     
-    increment_paused_address:
+    increment_array_address:
     addi $t0, $t0, 4        # increment display address location
     addi $t1, $t1, 4        # increment array location too
-    j draw_paused_start
-    draw_paused_end:
+    j draw_array_start
+    draw_array_end:
     
     jr $ra   # return 
     
@@ -815,11 +849,86 @@ drop_done:
     addi $sp, $sp, 4
     jr $ra
     
+################################################################################################
+# game over conditions
+
 checkGameOver:
     la $t0, columnArray
     add $t1, $t0, 60
     lw $t2, 0($t1)
-    bne $t2, 0, respond_to_Q
+    
+    # if game is in fact over, then...
+    bne $t2, 0, game_over_retry
+    # else, just return 
+    jr $ra
+    
+game_over_retry:
+    # clear the screen (maybe clear and repaint a couple times for the flashing effect?)
+    jal clearScreen
+    li $v0, 32          # operation to suspend program
+    li $a0, 200           # number of milliseconds to wait
+    syscall             # sleep
+    jal repaint
+    li $v0, 32          # operation to suspend program
+    li $a0, 200           # number of milliseconds to wait
+    syscall             # sleep
+    jal clearScreen
+    li $v0, 32          # operation to suspend program
+    li $a0, 200           # number of milliseconds to wait
+    syscall             # sleep
+    jal repaint
+    li $v0, 32          # operation to suspend program
+    li $a0, 200           # number of milliseconds to wait
+    syscall   
+    jal clearScreen
+    li $v0, 32          # operation to suspend program
+    li $a0, 200           # number of milliseconds to wait
+    syscall             # sleep# sleep
+    
+    # print words
+    # load values for display array function 
+    addi $a0, $zero, 640
+    la $a1, game_array
+    jal display_array
+    addi $a0, $zero, 1408
+    la $a1, over_array
+    jal display_array
+    
+    # pause for effect
+    li $v0, 32          # operation to suspend program
+    li $a0, 900           # number of milliseconds to wait
+    syscall             # sleep
+    
+    addi $a0, $zero, 2688   # load values for displaying the word paused w function
+    la $a1, retry_array
+    jal display_array
+    
+    # waiting for keyboard press r to retry
+    add $t0, $zero, $zero      # counter initialise to 0
+    retry_start:
+        bgt $t0, 5000, retry_end     # wait for 5 seconds, then exit
+        # sleep for delay
+        li $v0, 32          # operation to suspend program
+        li $a0, 1          # number of milliseconds to wait
+        syscall             # sleep
+        
+        lw $t1, ADDR_KBRD               # $t0 = base address for keyboard
+        lw $t8, 0($t1)                  # Load first word from keyboard
+        addi $t0, $t0, 1                # increment counter
+        bne $t8, 1, retry_start         # If first word is NOT 1, key is NOT pressed
+                                        # else key is pressed
+        lw $a0, 4($t1)                  # Load second word from keyboard
+        beq $a0, 0x72, main            # Check if the key p was pressed
+
+        j retry_start
+    retry_end:
+    
+    retry_loop_end:
+    j respond_to_Q  # finish game
+    
+################################################################################################
+################################################################################################
+# sleeping loops
 
 sleep:
     li $t0, 200000 # Count down to slow down the game_loop
