@@ -26,6 +26,14 @@ ADDR_DSPL:
 ADDR_KBRD:
     .word 0xffff0000
 colors: .word 0xff0000, 0x00ff00, 0x0000ff, 0xffff00, 0xffaa00, 0xaa00ff
+paused_array:  
+0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 
+
+ 
 
 ##############################################################################
 # Mutable Data
@@ -34,8 +42,7 @@ currentColumn: .space 12
 columnArray: .word 0:78 #6*13
 removeArray: .word 0:78
 gravity_count: .word 0 # to keep track of gravity
-score: .word 0  # score starts at 0 ################################## somewhere this is getting overwritten**
-
+score: .word 0  # score starts at 0 
 
 ##############################################################################
 # Code
@@ -272,9 +279,62 @@ keyboard_input:                     # A key is pressed
     addi $sp, $sp, 4
     jr $ra
     
-respond_to_P:
-
-
+respond_to_P:   # pause the game
+    addi $sp, $sp, -4
+    sw   $ra, 0($sp)
+    
+    # clear screen
+    jal clearScreen
+    # display the word paused on the screen
+    jal display_paused 
+    
+    # enter loop
+    pause_start:
+    # sleep for delay
+    li $v0, 32          # operation to suspend program
+    li $a0, 10          # number of milliseconds to wait
+    syscall             # sleep
+    
+    lw $t1, ADDR_KBRD               # $t0 = base address for keyboard
+    lw $t8, 0($t1)                  # Load first word from keyboard
+    bne $t8, 1, pause_start         # If first word is NOT 1, key is NOT pressed
+    # else key is pressed
+    lw $a0, 4($t1)                  # Load second word from keyboard
+    beq $a0, 0x70, pause_end        # Check if the key p was pressed
+    
+    # clear screen and repaint
+    #jal clearScreen
+    jal repaint
+    
+    j pause_start
+    pause_end:
+    lw $ra, 0($sp)
+    addi $sp, $sp, 4
+    jr $ra
+    
+display_paused:         # display the word paused on the screen
+    lw $t0, ADDR_DSPL
+    la $t5, 0xffffff # load colour
+    addi $t0, $t0, 2688     # add 128*21=2688 to address, so that it prints in the bottom 
+    la $t1, paused_array    # load address of the array
+    
+    
+    # stopping condition, once done 5 rows, 128*5 = 640
+    addi $t7, $t0, 640
+    draw_paused_start:
+    beq $t7, $t0, draw_paused_end # end if done
+    lw $t2, 0($t1)                              # load value from paused array
+    bne $t2, 1, increment_paused_address        # skip if value is 0
+    # else, draw white pixel
+    sw $t5, 0($t0)
+    
+    increment_paused_address:
+    addi $t0, $t0, 4        # increment display address location
+    addi $t1, $t1, 4        # increment array location too
+    j draw_paused_start
+    draw_paused_end:
+    
+    jr $ra   # return 
     
 w_shuffle:
     addi $sp, $sp, -4
