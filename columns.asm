@@ -26,15 +26,80 @@ ADDR_DSPL:
 ADDR_KBRD:
     .word 0xffff0000
 colors: .word 0xff0000, 0x00ff00, 0x0000ff, 0xffff00, 0xffaa00, 0xaa00ff
+paused_array:  
+0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+game_array: 
+0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 
+0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+over_array:
+0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+retry_array:
+0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 
 
+##BGM data
+pitches:.word 57, 93, 52, 88, 60, 52, 88, 59, 95, 52, 88, 93, 57, 52, 88, 56, 92, 52, 88, 95, 59, 52, 88, 57, 93, 52, 88, 56, 92, 52, 88, 91, 55, 50, 86, 59, 95, 50, 86, 93, 57, 50, 86, 55, 91, 50, 86, 54, 90, 50, 86, 55, 91, 50, 86, 93, 57, 50, 86, 55, 91, 86, 50, 93, 81, 57, 45, 88, 52, 76, 60, 40, 40, 76, 52, 88, 81, 45, 59, 52, 88, 84, 48, 93, 88, 47, 88, 83, 80, 59, 44, 88, 40, 56, 92, 40, 76, 52, 88, 80, 59, 44, 88, 91, 79, 43, 55, 50, 83, 59, 47, 50, 47, 86, 57, 50, 86, 50, 95, 83, 59, 47, 86, 50, 47, 86, 50, 54, 78, 42, 50, 86, 91, 83, 47, 47, 86, 50, 60, 57, 45, 52, 40, 81, 45, 47, 88, 83, 59, 95, 48, 79, 88, 47, 83, 45, 81, 91, 76, 52, 40, 56, 47, 59, 52, 59, 80, 44, 59, 52, 44, 62, 52, 40, 71, 74, 40, 59, 74, 38, 50, 86, 54, 50, 90, 86, 35, 86, 83, 47, 45, 57, 47, 55, 35, 83, 45, 81, 42, 83, 78, 74, 38, 90, 57, 45, 81, 78, 90, 45, 81, 57, 42, 38, 50, 78, 45, 52, 60, 45, 57, 59, 95, 47, 47, 59, 64, 40, 95, 59, 56, 40, 52, 88, 59, 56, 95, 44, 44, 56, 56, 44, 59, 95, 55, 59, 43, 95, 60, 57, 62, 40, 59, 52, 40, 56, 88, 84, 60, 57, 48, 59, 62, 79, 45, 60, 45, 57, 57, 93, 42, 54, 86, 60, 57, 45, 78, 57, 50, 62, 59, 47, 57, 60, 86, 60, 57, 83, 62, 47, 55, 59, 95, 96, 60, 62, 56, 92, 57, 93, 59, 95, 96, 60, 54, 90, 59, 95, 91, 47, 83, 55, 79, 88, 40, 57, 38, 55, 54, 90, 52, 40, 76, 76, 90, 54, 42, 50, 38, 40, 52, 76, 76, 42, 90, 38, 50, 43, 59, 62, 59, 43, 55, 95, 60, 57, 45, 81, 57, 54, 45, 95, 59, 60, 62, 47, 56, 92, 45, 81, 57, 95, 78, 59, 74, 54, 42, 90, 78, 76, 40, 55, 91, 95, 83, 47, 59, 93, 57, 76, 55, 91, 54, 90, 93, 45, 81, 57, 78, 54, 90, 40, 52, 76, 57, 76, 54, 42, 90, 38, 50, 52, 40, 76, 81, 76, 90, 54, 42, 50, 40, 52, 76, 76, 42, 45, 52, 57, 81, 45, 53, 41, 91, 88, 52, 55, 50, 86, 53, 88, 85, 49, 33, 52
+durations: .word 196, 209, 196, 255, 209, 196, 243, 209, 220, 185, 255, 243, 139, 175, 152, 209, 232, 185, 232, 220, 209, 185, 266, 243, 232, 196, 162, 220, 221, 196, 162, 185, 209, 196, 220, 220, 243, 196, 209, 220, 196, 196, 256, 187, 210, 196, 209, 196, 220, 196, 360, 209, 232, 196, 209, 220, 209, 198, 350, 209, 232, 209, 209, 173, 196, 209, 220, 173, 196, 173, 185, 209, 185, 162, 162, 185, 185, 196, 233, 198, 243, 209, 209, 209, 209, 325, 185, 162, 162, 185, 209, 173, 163, 198, 221, 173, 162, 173, 185, 173, 173, 209, 162, 162, 185, 220, 209, 196, 173, 196, 255, 173, 196, 185, 198, 209, 173, 220, 162, 173, 196, 266, 196, 209, 209, 187, 198, 185, 209, 347, 173, 336, 162, 209, 209, 196, 196, 209, 185, 220, 220, 196, 185, 162, 173, 163, 185, 244, 185, 185, 220, 232, 185, 185, 243, 162, 173, 209, 151, 151, 151, 209, 209, 266, 232, 336, 175, 175, 162, 209, 151, 209, 185, 209, 232, 173, 162, 209, 173, 185, 173, 278, 139, 139, 185, 244, 185, 220, 162, 185, 185, 209, 139, 162, 151, 209, 185, 209, 243, 163, 198, 139, 162, 139, 173, 173, 371, 173, 162, 162, 173, 196, 151, 151, 173, 173, 407, 185, 151, 232, 220, 173, 266, 371, 476, 220, 1, 220, 243, 360, 185, 173, 151, 162, 173, 220, 173, 476, 196, 278, 151, 196, 173, 175, 139, 151, 173, 196, 162, 173, 151, 196, 278, 151, 173, 162, 185, 162, 173, 173, 441, 196, 196, 209, 266, 187, 187, 221, 139, 196, 196, 209, 173, 185, 278, 336, 151, 162, 162, 185, 209, 209, 185, 196, 175, 173, 173, 347, 986, 1114, 1835, 232, 220, 162, 196, 162, 196, 209, 209, 232, 198, 221, 173, 196, 185, 325, 196, 232, 173, 209, 209, 243, 196, 290, 151, 139, 210, 280, 336, 453, 196, 139, 255, 220, 151, 139, 162, 151, 185, 198, 187, 256, 220, 151, 173, 196, 173, 173, 209, 266, 151, 278, 173, 209, 173, 196, 209, 498, 522, 917, 986, 173, 220, 185, 173, 196, 187, 198, 196, 209, 220, 173, 173, 173, 185, 162, 185, 185, 185, 173, 162, 185, 220, 162, 185, 185, 209, 185, 210, 196, 196, 209, 185, 232, 162, 220, 209, 220, 209, 185, 220, 220, 232, 255, 151, 209, 140, 140, 163, 185, 173, 196, 196, 266, 162, 209, 139, 139, 139, 196, 196, 196, 243, 187, 139, 476, 975, 162, 173, 616, 162, 1789, 302, 453, 453, 487, 453, 476, 498, 498, 498, 1637, 336, 1962
+instruments:.word 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4
+velocity:.word 88, 88, 82, 82, 84, 79, 79, 93, 93, 92, 88, 88, 88, 91, 91, 83, 83, 82, 82, 82, 80, 91, 88, 88, 88, 92, 92, 81, 81, 94, 94, 82, 82, 81, 81, 81, 81, 80, 80, 85, 80, 85, 77, 77, 77, 82, 82, 80, 80, 82, 76, 76, 76, 81, 81, 86, 79, 79, 77, 77, 77, 81, 81, 87, 87, 87, 87, 88, 88, 75, 75, 75, 77, 77, 77, 77, 77, 77, 88, 80, 84, 84, 84, 84, 90, 82, 101, 101, 81, 81, 81, 68, 80, 80, 80, 78, 78, 78, 78, 81, 81, 81, 71, 86, 86, 86, 86, 86, 88, 88, 88, 84, 84, 84, 83, 81, 81, 81, 91, 91, 91, 91, 90, 90, 90, 80, 80, 80, 80, 75, 75, 84, 84, 84, 84, 93, 93, 93, 96, 96, 96, 89, 89, 86, 86, 85, 85, 61, 80, 80, 80, 80, 82, 82, 82, 77, 77, 77, 81, 81, 81, 90, 90, 90, 92, 83, 83, 83, 94, 94, 89, 89, 85, 85, 85, 87, 90, 90, 79, 79, 79, 80, 80, 80, 80, 62, 92, 92, 85, 85, 99, 99, 63, 63, 63, 63, 98, 98, 98, 92, 92, 59, 59, 78, 78, 78, 82, 82, 85, 85, 85, 85, 89, 89, 89, 89, 88, 88, 89, 89, 89, 84, 84, 84, 93, 93, 79, 79, 79, 87, 87, 76, 76, 76, 91, 91, 82, 82, 90, 88, 87, 87, 87, 87, 88, 88, 88, 88, 89, 89, 96, 96, 82, 82, 82, 82, 82, 84, 84, 84, 94, 94, 94, 94, 88, 94, 94, 94, 96, 96, 96, 96, 83, 86, 86, 76, 76, 76, 76, 96, 96, 96, 88, 88, 81, 86, 86, 81, 81, 81, 81, 89, 89, 82, 82, 81, 88, 88, 84, 84, 87, 87, 82, 82, 83, 78, 78, 78, 75, 75, 75, 86, 84, 66, 66, 66, 85, 85, 86, 86, 90, 90, 90, 83, 79, 79, 79, 78, 78, 84, 84, 84, 84, 71, 71, 79, 79, 95, 77, 84, 84, 84, 84, 84, 95, 95, 95, 91, 91, 91, 91, 87, 87, 71, 80, 80, 81, 81, 72, 72, 72, 75, 75, 75, 80, 76, 76, 76, 76, 66, 66, 66, 66, 79, 79, 79, 79, 80, 80, 68, 68, 68, 79, 79, 84, 84, 84, 84, 82, 74, 74, 84, 84, 66, 83, 83, 70, 70, 70, 79, 79, 83, 83, 76, 85, 85, 68, 68, 68, 70, 82, 82, 82, 81, 71, 90, 90, 77, 77, 77, 80, 80, 94, 94, 94, 94, 94, 94, 94, 97, 97, 79, 79, 79
+length:.word 434
+
+##Sound Effect data
+# ----- Remove -----
+remove_pitches: .word 84, 88, 91, 96
+remove_durations:.word 60, 60, 60, 120
+remove_instruments:.word 81
+remove_velocity:.word 90, 100, 110, 120
+remove_length: 4
+# ----- Drop -----
+drop_pitches: .word 56
+drop_durations:.word 750
+drop_instruments:.word 116
+drop_velocity:.word 100
+drop_length: 1
+# ----- Shuffle -----
+shuffle_pitches: .word 57, 60
+shuffle_durations:.word 50, 50
+shuffle_instruments:.word 13, 13
+shuffle_velocity:.word 100, 100
+shuffle_length: 2
+# ----- Gameover -----
+gameover_pitches: .word 76, 72, 67, 60
+gameover_durations:.word 200, 200, 250, 400
+gameover_instruments:.word 1 
+gameover_velocity:.word 110, 100, 90, 80
+gameover_length: 4
 ##############################################################################
 # Mutable Data
 ##############################################################################
 currentColumn: .space 12
 columnArray: .word 0:78 #6*13
 removeArray: .word 0:78
-score: .word 10:1  # score starts at 0 ################################## somewhere this is getting overwritten**
-
+gravity_count: .word 0 # to keep track of gravity
+score: .word 0  # score starts at 0 
+music_index: .word 0
+music_enabled: .word 0
+music_paused: .word 0
+music_counter: .word 0
+music_tick: .word 0
 ##############################################################################
 # Code
 ##############################################################################
@@ -43,6 +108,9 @@ score: .word 10:1  # score starts at 0 ################################## somewh
 main:
     #Initialization
     jal reset
+    
+    # get input for levels 1,2,3
+    
     jal drawBorderTop
     jal drawBorderBottom
     jal drawBorderLeft
@@ -53,6 +121,7 @@ main:
     
 game_loop: # put the intialisation in a loop
     jal initialise_sleep_counter
+
     check_settings:
     # 1a. Check if key has been pressed
     # 1b. Check which key has been pressed
@@ -81,9 +150,34 @@ game_loop: # put the intialisation in a loop
 ##############################################################################
 #reset: Reset the arrays and offsets
 reset:
+    
+    # clear current Column (12 bytes)
+    clearCurrentColumn:
+    la $t1, currentColumn
+    lw $zero, 0($t1)
+    lw $zero, 4($t1)
+    lw $zero, 8($t1)
+    
+    # clear column array (78 words)
+    clearColumnArray: 
+    la $t4, columnArray
+    addi $t7, $t4, 312  # intiailise stopping condition
+    clearPixel_start:
+        beq $t4, $t7, clearPixel_end    # end if done  clearing all array elements
+        sw $zero, 0($t4)    # store 0 (to clear)
+        add $t4, $t4, 4     # increment column array address
+        j clearPixel_start
+    clearPixel_end:
+    
+    # reset score, gravity count
+    la $t0, score
+    sw $zero, 0($t0)
+    la $t0, gravity_count
+    sw $zero, 0($t0)
+    
     la $s1, currentColumn #$ s1 - Array hold the colors of current column
     add $s2, $zero, 6 #$s2 - Initial X offset
-    add $s3, $zero, 4 #$s3 - Initial Y offset
+    add $s3, $zero, 2 #$s3 - Initial Y offset
     la $s4, columnArray
     jr $ra
 
@@ -197,7 +291,6 @@ next:
 repaint:
     addi $sp, $sp, -4
     sw   $ra, 0($sp)
-
     jal clearScreen
     jal drawBorderTop
     jal drawBorderBottom
@@ -247,9 +340,69 @@ keyboard_input:                     # A key is pressed
     beq $a0, 0x73, s_moveDown     # Check if the key s was pressed
     beq $a0, 0x64, d_moveRight     # Check if the key d was pressed
     beq $a0, 0x71, respond_to_Q     # Check if the key q was pressed
+    beq $a0, 0x70, respond_to_P     # check if the key p was pressed
     lw $ra, 0($sp)
     addi $sp, $sp, 4
     jr $ra
+    
+respond_to_P:   # pause the game
+    addi $sp, $sp, -4
+    sw   $ra, 0($sp)
+    
+    # clear screen
+    jal clearScreen
+    # display the word paused on the screen
+    addi $a0, $zero, 2688       # load starting offset
+    la $a1, paused_array    # load array address
+    jal display_array 
+    
+    # enter loop
+    pause_start:
+    # sleep for delay
+    li $v0, 32          # operation to suspend program
+    li $a0, 10          # number of milliseconds to wait
+    syscall             # sleep
+    
+    lw $t1, ADDR_KBRD               # $t0 = base address for keyboard
+    lw $t8, 0($t1)                  # Load first word from keyboard
+    bne $t8, 1, pause_start         # If first word is NOT 1, key is NOT pressed
+    # else key is pressed
+    lw $a0, 4($t1)                  # Load second word from keyboard
+    beq $a0, 0x70, pause_end        # Check if the key p was pressed
+    
+    # clear screen and repaint
+    #jal clearScreen
+    jal repaint
+    
+    j pause_start
+    pause_end:
+    lw $ra, 0($sp)
+    addi $sp, $sp, 4
+    jr $ra
+    
+display_array:         # display the word FROM THE ARRAY on the screen (paused, game over retry)
+    lw $t0, ADDR_DSPL
+    la $t5, 0xffffff # load colour
+    add $t0, $t0, $a0     # add offset to address, so that it prints in the bottom plus whatever
+    add $t1, $zero, $a1    # load address of the array
+    
+    
+    # stopping condition, once done 6 rows, 128*5 = 640
+    addi $t7, $t0, 768
+    draw_array_start:
+    beq $t7, $t0, draw_array_end # end if done
+    lw $t2, 0($t1)                              # load value from paused array
+    bne $t2, 1, increment_array_address        # skip if value is 0
+    # else, draw white pixel
+    sw $t5, 0($t0)
+    
+    increment_array_address:
+    addi $t0, $t0, 4        # increment display address location
+    addi $t1, $t1, 4        # increment array location too
+    j draw_array_start
+    draw_array_end:
+    
+    jr $ra   # return 
     
 w_shuffle:
     addi $sp, $sp, -4
@@ -268,11 +421,17 @@ w_shuffle:
     sw $t4, 0($s1) #New first color
     sw $t2, 4($s1) #New second color
     sw $t3, 8($s1) #New third color
+    
+    jal play_shuffle
     lw $ra, 0($sp)
+    addi $sp, $sp, 4
+    lw $ra, 0($sp) ##################******************************************
     addi $sp, $sp, 4
     jr $ra
 noShuffle:
-    jr $ra
+    lw $ra, 0($sp)#################******************************************
+    addi $sp, $sp, 4
+    jr $ra #################****************************************** having issues getting stuck here...
 
     
 respond_to_Q:
@@ -425,6 +584,8 @@ createColumn_loop:
 
     
 recordColumn:
+    addi $sp, $sp, -4
+    sw $ra, 0($sp)
     la $t0, columnArray
     addi $t1, $s2, -3
     addi $t2, $s3, -4
@@ -444,15 +605,18 @@ recordColumn_loop:
     addi $t3, $t3, 1
     blt $t3, 3, recordColumn_loop
     
+    lw $ra,0($sp)
+    addi $sp,$sp,4
     jr $ra
     
 reachBottom:
+    jal play_drop
     jal recordColumn
     jal checkCollision
     jal createColumn
     jal checkGameOver
     li $s2, 6
-    li $s3, 4
+    li $s3, 2
     j game_loop
 
 checkCollision:
@@ -464,6 +628,7 @@ checkCollision_loop:
     beq $v0,$zero, end_checkCollision   # no matches, exit loop
 
     jal removeMatches
+    jal play_remove
     jal dropping
 
     j checkCollision_loop
@@ -520,10 +685,11 @@ ScanOneRow:
     jal markHorizontalMatch
     li $s6, 1 #A Three Match Found
     # load score AND increment
-    la $t1, score # load score address
-    lw $s7, 0($t1)
+    la $t8, score # load score address
+    lw $s7, 0($t8)
     addi $s7, $s7, 1
-    sw $s7, 0($t1)
+    sw $s7, 0($t8)
+    add $t8, $zero, $zero   # reset temp register
     
     ####Vertical Check######
     vertical: 
@@ -542,10 +708,11 @@ ScanOneRow:
         jal markVerticalMatch
         li $s6, 1 #A Three Match Found
         # load score AND increment
-        la $t1, score # load score address
-        lw $s7, 0($t1)
+        la $t8, score # load score address
+        lw $s7, 0($t8)
         addi $s7, $s7, 1
-        sw $s7, 0($t1)
+        sw $s7, 0($t8)
+        add $t8, $zero, $zero   # reset temp register
         
     ####Diagonal Check######
     diagonal_down: #\
@@ -565,9 +732,11 @@ ScanOneRow:
         jal markDiagonalDown
         li $s6, 1 #A Three Match Found
         # load score AND increment
-        lw $s7, score
+        la $t8, score # load score address
+        lw $s7, 0($t8)
         addi $s7, $s7, 1
-        sw $s7, score
+        sw $s7, 0($t8)
+        add $t8, $zero, $zero   # reset temp register
         
     diagonal_up: #/
         blt $t1, 2, skip_diag_up #Last two rows already covered, skip
@@ -585,10 +754,13 @@ ScanOneRow:
         move $a1, $t2 #a1 - x
         jal markDiagonalUp
         li $s6, 1 #A Three Match Found
+        
         # load score AND increment
-        lw $s7, score
+        la $t8, score # load score address
+        lw $s7, 0($t8)
         addi $s7, $s7, 1
-        sw $s7, score
+        sw $s7, 0($t8)
+        add $t8, $zero, $zero   # reset temp register
         j skip_diag_up  
 ###Helpers for checkThree
 skip_diag_up:
@@ -719,11 +891,87 @@ drop_done:
     addi $sp, $sp, 4
     jr $ra
     
+################################################################################################
+# game over conditions
+
 checkGameOver:
     la $t0, columnArray
     add $t1, $t0, 60
     lw $t2, 0($t1)
-    bne $t2, 0, respond_to_Q
+    
+    # if game is in fact over, then...
+    bne $t2, 0, game_over_retry
+    # else, just return 
+    jr $ra
+    
+game_over_retry:
+    jal play_gameover
+    # clear the screen (maybe clear and repaint a couple times for the flashing effect?)
+    jal clearScreen
+    li $v0, 32          # operation to suspend program
+    li $a0, 200           # number of milliseconds to wait
+    syscall             # sleep
+    jal repaint
+    li $v0, 32          # operation to suspend program
+    li $a0, 200           # number of milliseconds to wait
+    syscall             # sleep
+    jal clearScreen
+    li $v0, 32          # operation to suspend program
+    li $a0, 200           # number of milliseconds to wait
+    syscall             # sleep
+    jal repaint
+    li $v0, 32          # operation to suspend program
+    li $a0, 200           # number of milliseconds to wait
+    syscall   
+    jal clearScreen
+    li $v0, 32          # operation to suspend program
+    li $a0, 200           # number of milliseconds to wait
+    syscall             # sleep# sleep
+    
+    # print words
+    # load values for display array function 
+    addi $a0, $zero, 640
+    la $a1, game_array
+    jal display_array
+    addi $a0, $zero, 1408
+    la $a1, over_array
+    jal display_array
+    
+    # pause for effect
+    li $v0, 32          # operation to suspend program
+    li $a0, 900           # number of milliseconds to wait
+    syscall             # sleep
+    
+    addi $a0, $zero, 2688   # load values for displaying the word paused w function
+    la $a1, retry_array
+    jal display_array
+    
+    # waiting for keyboard press r to retry
+    add $t0, $zero, $zero      # counter initialise to 0
+    retry_start:
+        bgt $t0, 5000, retry_end     # wait for 5 seconds, then exit
+        # sleep for delay
+        li $v0, 32          # operation to suspend program
+        li $a0, 1          # number of milliseconds to wait
+        syscall             # sleep
+        
+        lw $t1, ADDR_KBRD               # $t0 = base address for keyboard
+        lw $t8, 0($t1)                  # Load first word from keyboard
+        addi $t0, $t0, 1                # increment counter
+        bne $t8, 1, retry_start         # If first word is NOT 1, key is NOT pressed
+                                        # else key is pressed
+        lw $a0, 4($t1)                  # Load second word from keyboard
+        beq $a0, 0x72, main            # Check if the key p was pressed
+
+        j retry_start
+    retry_end:
+    
+    retry_loop_end:
+    j respond_to_Q  # finish game
+    
+################################################################################################
+################################################################################################
+# sleeping loops
 
 sleep:
     li $t0, 200000 # Count down to slow down the game_loop
@@ -733,26 +981,182 @@ sleep_loop:
     jr $ra
     
 initialise_sleep_counter:
-    lw $s7, score   # load score
-    srl $s7, $s7, 1 # divide score by 2
-    mult $s7, $s7, -1
-    # count $a3 is 100-(score//2)
-    addi $a3, $s7, 100     # load $a3, which is the difficulty, where the lower $a3, the harder the game
-    add $s7, $zero, $zero # initialise score counter
+    # reset gravity counter
+    la $t1, gravity_count # load address for gravity counter
+    sw $zero, 0($t1)       # store the updated count in memory
 
     updating_sleep_loop_start:
-    beq $s7, $a3, updating_sleep_loop_end #if counter reaches stopping condition, then exit loop
+    # load score
+    lw $s0, score
+    sll $s0, $s0, 2                         # multiply by 4
+    addi $a3, $zero, 120
+    sub $a3, $a3, $s0                       # stopping condition is 100 - score*2
+    lw $s7, gravity_count                   # load gravity counter value into register
+    bge $s7, $a3, updating_sleep_loop_end   # if counter reaches stopping condition, then exit loop
     j check_settings
 
 increment_sleep:        # to implement gravity
+    addi $sp, $sp, -4
+    sw $ra, 0($sp)
     add $t0, $v0, $zero # save value in $v0
     li $v0, 32          # operation to suspend program
     li $a0, 1           # number of milliseconds to wait
     syscall             # sleep
+    lw $s7, gravity_count       # load gravity counter value into register
     addi $s7, $s7, 1    # increment $s7 by 1
+
+    la $t1, gravity_count # load address for gravity counter
+    sw $s7, 0($t1)       # store the updated count in memory
     
-    add $v0, $t0, $zero # reload value in $v0
+    add $v0, $t0, $zero # reload value in $v0 (so it doesn't mess anything up)
+    
+    # --- MUSIC BACKGROUND TICK (≈ every 50 ms) ---
+    la   $t9, music_tick
+    lw   $t0, 0($t9)
+    addi $t0, $t0, 1
+    sw   $t0, 0($t9)
+
+    li   $t1, 25           # adjust for tempo: 40–60 is common
+    blt  $t0, $t1, music_skip
+
+    # time to play one async note
+    sw   $zero, 0($t9)     # reset counter
+    jal  play_music_tick_async
+    
+    music_skip:
     j updating_sleep_loop_start
     updating_sleep_loop_end:
+    lw $ra, 0($sp)
+    addi $sp, $sp, 4
     jr $ra
     
+################################################################################################
+                        ##################  MUSIC   ######################
+################################################################################################
+
+play_music_tick_async:
+    addi $sp, $sp, -4
+    sw $ra, 0($sp)
+    
+    la $t0, pitches
+    la $t1, durations
+    la $t2, velocity
+    la $t3, instruments
+    la $t4, music_index
+    lw $t5, 0($t4) # current index
+    lw $t6, length # total number of notes
+
+    bge $t5, $t6, music_reset
+
+    mul $t7, $t5, 4
+
+    # Load pitch
+    add $t8, $t0, $t7
+    lw $a0, 0($t8)
+
+    # Load duration
+    add $t8, $t1, $t7
+    lw $a1, 0($t8)
+
+    # Load velocity
+    add $t8, $t2, $t7
+    lw $a2, 0($t8)
+
+    # Load instrument
+    add $t8, $t3, $t7
+    lw $a3, 0($t8)
+
+    # Play a note
+    li $v0, 31
+    syscall
+
+    # Increment index
+    addi $t5, $t5, 1
+    sw $t5, 0($t4)
+    jr $ra
+
+music_reset:
+    sw $zero, 0($t4)
+    
+    lw $ra, 0($sp)
+    addi $sp, $sp, 4
+    jr $ra
+    
+play_shuffle:
+    addi $sp, $sp, -4
+    sw $ra, 0($sp)
+    la   $t1, shuffle_pitches        # pointer to pitches[]
+    la   $t2, shuffle_durations      # pointer to durations[] (already in ms)
+    la   $t3, shuffle_velocity     # pointer to velocities[]
+    la   $t4, shuffle_instruments    # pointer to instruments[]
+    lw   $t5, shuffle_length         # number of notes
+    li   $t0, 0              # index i = 0
+    j play_loop
+    
+play_remove:
+    addi $sp, $sp, -4
+    sw $ra, 0($sp)
+    la   $t1, remove_pitches        # pointer to pitches[]
+    la   $t2, remove_durations      # pointer to durations[] (already in ms)
+    la   $t3, remove_velocity     # pointer to velocities[]
+    la   $t4, remove_instruments    # pointer to instruments[]
+    lw   $t5, remove_length         # number of notes
+    li   $t0, 0              # index i = 0
+    j play_loop
+    
+play_drop:
+    addi $sp, $sp, -4
+    sw $ra, 0($sp)
+    la   $t1, drop_pitches
+    la   $t2, drop_durations
+    la   $t3, drop_velocity
+    la   $t4, drop_instruments 
+    lw   $t5, drop_length
+    li   $t0, 0 # index i = 0
+    j play_loop
+    
+play_gameover:
+    addi $sp, $sp, -4
+    sw $ra, 0($sp)
+    la   $t1, gameover_pitches
+    la   $t2, gameover_durations
+    la   $t3, gameover_velocity
+    la   $t4, gameover_instruments
+    lw   $t5, gameover_length     
+    li   $t0, 0  # index = 0
+    j play_loop
+
+play_loop:
+    bge  $t0, $t5, finished   # if index >= length: exit loop
+    mul  $t6, $t0, 4 # compute address offset = i * 4
+
+    #Load pitch
+    add  $t7, $t1, $t6
+    lw   $a0, 0($t7)
+
+    #Load duration
+    add  $t7, $t2, $t6
+    lw   $a1, 0($t7)
+
+    #Load velocity
+    add  $t7, $t3, $t6
+    lw   $a3, 0($t7)
+
+    #Load instrument
+    add  $t7, $t4, $t6
+    lw   $a2, 0($t7)
+
+    #PLAY note
+    li   $v0, 33
+    syscall
+
+    #next note
+    addi $t0, $t0, 1
+    j play_loop
+
+finished:
+    lw $ra, 0($sp)
+    addi $sp, $sp, 4
+    jr $ra
+    
+
