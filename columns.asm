@@ -336,12 +336,9 @@ respond_to_P:   # pause the game
     lw $a0, 4($t1)                  # Load second word from keyboard
     beq $a0, 0x70, pause_end        # Check if the key p was pressed
     
-    # clear screen and repaint
-    #jal clearScreen
-    jal repaint
-    
     j pause_start
-    pause_end:
+    pause_end:      # repaint is handled back in game_loop
+    
     lw $ra, 0($sp)
     addi $sp, $sp, 4
     jr $ra
